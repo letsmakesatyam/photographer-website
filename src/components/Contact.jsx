@@ -19,7 +19,9 @@ export default function Contact() {
     message: '',
   });
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [formError, setFormError] = useState(null);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -27,25 +29,36 @@ export default function Contact() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
+    setFormError(null);
 
-    const subject = encodeURIComponent(`Photography Inquiry from ${formData.name}`);
-    const body = encodeURIComponent(
-      `Hello Jude,\n\nYou have a new inquiry with the following details:\n\n` +
-      `Name: ${formData.name}\n` +
-      `Email: ${formData.email}\n` +
-      `Phone: ${formData.phone}\n` +
-      `Interested In: ${formData.plan}\n\n` +
-      `Message:\n${formData.message}`
-    );
+    try {
+      const phoneNumber = '918010999080'; // Your WhatsApp number without '+'
+      const messageBody = `New Photography Inquiry:\n\n` +
+                          `Name: ${formData.name}\n` +
+                          `Email: ${formData.email}\n` +
+                          `Phone: ${formData.phone}\n` +
+                          `Interested In: ${formData.plan}\n\n` +
+                          `Message: ${formData.message}`;
 
-    window.location.href = `mailto:satyamrevgadelinkedin@gmail.com?subject=${subject}&body=${body}`;
+      const encodedMessage = encodeURIComponent(messageBody);
+      const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
 
-    setIsSubmitted(true);
-    setFormData({ name: '', email: '', phone: '', plan: '', message: '' });
+      // Open WhatsApp in a new tab
+      window.open(whatsappUrl, '_blank');
 
-    setTimeout(() => {
-        setIsSubmitted(false);
-    }, 5000); // Hide message after 5 seconds
+      // Update UI to show confirmation
+      setIsSubmitted(true);
+      setFormData({ name: '', email: '', phone: '', plan: '', message: '' }); // Reset form
+      setTimeout(() => setIsSubmitted(false), 5000); // Hide success message after 5 seconds
+    
+    } catch (error) {
+      console.error("Failed to open WhatsApp link: ", error);
+      setFormError("Could not open WhatsApp. Please disable your pop-up blocker and try again.");
+      setTimeout(() => setFormError(null), 6000);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -67,11 +80,11 @@ export default function Contact() {
         </motion.div>
 
         <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="mt-12 bg-gray-800/50 p-8 rounded-2xl shadow-2xl border border-white/10"
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="mt-12 bg-gray-800/50 p-8 rounded-2xl shadow-2xl border border-white/10"
         >
           <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Name Input */}
@@ -87,11 +100,11 @@ export default function Contact() {
             </div>
 
             {/* Phone Input */}
-             <div className="md:col-span-1">
+            <div className="md:col-span-1">
               <label htmlFor="phone" className="block text-sm font-medium text-gray-300 mb-2">Phone Number</label>
               <input type="tel" name="phone" id="phone" value={formData.phone} onChange={handleChange} required className="w-full px-4 py-3 rounded-lg bg-gray-700 text-white border-2 border-transparent focus:outline-none focus:border-amber-400 transition" />
             </div>
-            
+
             {/* Plan Dropdown */}
             <div className="md:col-span-1">
               <label htmlFor="plan" className="block text-sm font-medium text-gray-300 mb-2">I'm Interested In...</label>
@@ -100,7 +113,7 @@ export default function Contact() {
                 {serviceNames.map(name => <option key={name} value={name}>{name}</option>)}
               </select>
             </div>
-            
+
             {/* Message Textarea */}
             <div className="md:col-span-2">
               <label htmlFor="message" className="block text-sm font-medium text-gray-300 mb-2">Your Message</label>
@@ -109,14 +122,21 @@ export default function Contact() {
 
             {/* Submit Button */}
             <div className="md:col-span-2 text-center">
-              <button type="submit" className="bg-amber-500 text-gray-900 font-bold py-3 px-10 rounded-lg hover:bg-amber-400 transition-colors text-lg">
-                Send Inquiry
+              <button type="submit" disabled={isSubmitting} className="bg-amber-500 text-gray-900 font-bold py-3 px-10 rounded-lg hover:bg-amber-400 transition-colors text-lg disabled:bg-gray-500 disabled:cursor-not-allowed">
+                {isSubmitting ? 'Redirecting...' : 'Send on WhatsApp'}
               </button>
             </div>
           </form>
+          
+          {/* Submission Status Messages */}
           {isSubmitted && (
             <p className="mt-4 text-green-400 text-center">
-              Thank you for your message! We will contact you shortly.
+              Redirecting you to WhatsApp. Please send the pre-filled message.
+            </p>
+          )}
+          {formError && (
+            <p className="mt-4 text-red-400 text-center">
+              {formError}
             </p>
           )}
         </motion.div>
@@ -124,3 +144,4 @@ export default function Contact() {
     </div>
   );
 }
+
