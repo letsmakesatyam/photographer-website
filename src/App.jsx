@@ -2,6 +2,8 @@ import React, { useEffect, useRef } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import LocomotiveScroll from "locomotive-scroll";
 import About from "./components/About";
+import Services from "./components/Services";
+import Contact from "./components/Contact";
 import "locomotive-scroll/dist/locomotive-scroll.css";
 
 // Components
@@ -72,6 +74,8 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="/portfolio" element={<Portfolio />} />
           <Route path="/about" element={<About />} />
+          <Route path="/services" element={<Services />} />
+          <Route path="/contact" element={<Contact />} />
             {/* Add other routes here */}
         </Routes>
         <Footer />

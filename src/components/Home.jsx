@@ -16,47 +16,38 @@ const InstagramIcon = ({ className }) => (
   </svg>
 );
 
-// --- Reliable dynamic portfolio sources (Unsplash "random by query", stable) ---
-// using source.unsplash.com with unique `sig` values to ensure different images and high reliability.
 const portfolioSets = [
-  // Wedding
   [
     { src: "https://images.pexels.com/photos/14354431/pexels-photo-14354431.jpeg?auto=compress&cs=tinysrgb&w=800&h=1000", alt: "Wedding — Couple" },
     { src: "https://images.pexels.com/photos/17362056/pexels-photo-17362056.jpeg?auto=compress&cs=tinysrgb&w=800&h=1000", alt: "Bride & Groom Embrace" },
     { src: "https://images.pexels.com/photos/27350424/pexels-photo-27350424.jpeg?auto=compress&cs=tinysrgb&w=800&h=1000", alt: "Portrait of a Bride" },
   ],
-  // Concert
   [
     { src: "https://images.pexels.com/photos/13230616/pexels-photo-13230616.jpeg?auto=compress&cs=tinysrgb&w=800&h=1000", alt: "Concert — Stage Lights" },
     { src: "https://images.pexels.com/photos/1105666/pexels-photo-1105666.jpeg?auto=compress&cs=tinysrgb&w=800&h=1000", alt: "Concert Crowd" },
     { src: "https://images.pexels.com/photos/1190297/pexels-photo-1190297.jpeg?auto=compress&cs=tinysrgb&w=800&h=1000", alt: "Live Performance" },
   ],
-  // Profile
   [
     { src: "https://images.pexels.com/photos/30875100/pexels-photo-30875100.jpeg?auto=compress&cs=tinysrgb&w=800&h=1000", alt: "Studio Portrait" },
     { src: "https://images.pexels.com/photos/34114598/pexels-photo-34114598.jpeg?auto=compress&cs=tinysrgb&w=800&h=1000", alt: "Creative Headshot" },
     { src: "https://images.pexels.com/photos/31578771/pexels-photo-31578771.jpeg?auto=compress&cs=tinysrgb&w=800&h=1000", alt: "Outdoor Portrait" },
   ],
-  // Product
   [
     { src: "https://images.pexels.com/photos/27113463/pexels-photo-27113463.jpeg?auto=compress&cs=tinysrgb&w=800&h=1000", alt: "Product — Sandals" },
     { src: "https://images.pexels.com/photos/8278246/pexels-photo-8278246.jpeg?auto=compress&cs=tinysrgb&w=800&h=1000", alt: "Product Studio Shot" },
     { src: "https://images.pexels.com/photos/13516791/pexels-photo-13516791.jpeg?auto=compress&cs=tinysrgb&w=800&h=1000", alt: "Beauty / Cosmetic Set" },
   ],
-  // Landscape
   [
     { src: "https://images.pexels.com/photos/417074/pexels-photo-417074.jpeg?auto=compress&cs=tinysrgb&w=800&h=1000", alt: "Lake & Mountain" },
     { src: "https://images.pexels.com/photos/1366919/pexels-photo-1366919.jpeg?auto=compress&cs=tinysrgb&w=800&h=1000", alt: "Snowy Mountain" },
     { src: "https://images.pexels.com/photos/1001682/pexels-photo-1001682.jpeg?auto=compress&cs=tinysrgb&w=800&h=1000", alt: "Ocean / Seascape" },
   ],
-  // Event
   [
     { src: "https://images.pexels.com/photos/19234633/pexels-photo-19234633.jpeg?auto=compress&cs=tinysrgb&w=800&h=1000", alt: "Event — Crowd" },
     { src: "https://images.pexels.com/photos/18477166/pexels-photo-18477166.jpeg?auto=compress&cs=tinysrgb&w=800&h=1000", alt: "Heads of Crowd" },
     { src: "https://images.pexels.com/photos/17851094/pexels-photo-17851094.jpeg?auto=compress&cs=tinysrgb&w=800&h=1000", alt: "Raised Hands at Event" },
   ],
 ];
-  
 
 const testimonials = [
   { name: "Neil V Banks", text: "Truly one of the finest photographers. His versatility allows him to click fantastic shots for profiles, products, concerts, and landscapes." },
@@ -68,7 +59,6 @@ export default function Home() {
   const [index, setIndex] = useState(0);
   const [portfolioImages, setPortfolioImages] = useState(portfolioSets[0]);
 
-  // rotate every 6s using functional updates (avoids stale closures)
   useEffect(() => {
     const interval = setInterval(() => {
       setIndex((prev) => {
@@ -80,12 +70,9 @@ export default function Home() {
     return () => clearInterval(interval);
   }, []);
 
-  // Ensure locomotive-scroll recalculates after images load (fixes the long blank page)
   useEffect(() => {
-    // select only the images in the portfolio grid
     const imgs = Array.from(document.querySelectorAll(".portfolio-dynamic-img"));
     if (imgs.length === 0) {
-      // force a resize so loco recalculates even if no imgs found
       requestAnimationFrame(() => window.dispatchEvent(new Event("resize")));
       return;
     }
@@ -94,7 +81,6 @@ export default function Home() {
     const onLoad = () => {
       loaded += 1;
       if (loaded >= imgs.length) {
-        // trigger resize so locomotive-scroll updates container height
         requestAnimationFrame(() => window.dispatchEvent(new Event("resize")));
       }
     };
@@ -102,7 +88,6 @@ export default function Home() {
     imgs.forEach((img) => {
       if (img.complete) onLoad();
       else img.addEventListener("load", onLoad, { once: true });
-      // also handle error: count it so we don't hang
       img.addEventListener("error", onLoad, { once: true });
     });
 
@@ -116,7 +101,6 @@ export default function Home() {
 
   return (
     <div className="relative bg-slate-900 text-slate-100 overflow-x-hidden">
-      {/* Aurora Background Effect */}
       <div className="absolute top-0 left-0 right-0 bottom-0 overflow-hidden z-0">
         <div className="absolute top-[-50%] left-[-50%] w-[200%] h-[200%] bg-gradient-radial from-indigo-900/40 via-transparent to-transparent animate-aurora"></div>
       </div>
@@ -130,55 +114,53 @@ export default function Home() {
       <div className="relative z-10 px-6 md:px-12 py-16 space-y-24 md:space-y-32">
         {/* Hero Section */}
         <section className="min-h-[80vh] flex flex-col md:flex-row items-center justify-center gap-12 md:gap-20 px-6">
-  {/* Left: Text Content */}
-  <motion.div
-    className="flex-1 text-center md:text-left max-w-2xl"
-    initial={{ opacity: 0, x: -50 }}
-    animate={{ opacity: 1, x: 0 }}
-    transition={{ duration: 0.8, ease: "easeInOut" }}
-  >
-    <h1 className="text-5xl md:text-7xl font-bold tracking-tight mb-4 text-transparent bg-clip-text bg-gradient-to-br from-blue-400 to-purple-500 text-balance pb-2">
-      Jude Photographs
-    </h1>
-    <p className="text-lg md:text-xl text-gray-300 mb-8 font-light max-w-xl mx-auto md:mx-0">
-      With a keen eye for detail and a passion for authentic moments, I craft compelling visual narratives that go beyond a simple photograph, turning your precious memories into timeless works of art.
-    </p>
-    <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-      <Link
-        to="/portfolio"
-        className="group flex items-center justify-center px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg shadow-blue-500/30 text-white"
-      >
-        View Portfolio <ArrowRightIcon className="ml-2 w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" />
-      </Link>
-      <a
-        href="https://www.instagram.com/judephotographs/reels/?hl=en"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="group flex items-center justify-center px-6 py-3 bg-gradient-to-r from-purple-600 via-pink-600 to-orange-500 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg shadow-pink-500/30 text-white"
-      >
-        Instagram Reels <InstagramIcon className="ml-2 w-5 h-5 transition-transform duration-300 group-hover:rotate-12" />
-      </a>
-    </div>
-  </motion.div>
+          <motion.div
+            className="flex-1 text-center md:text-left max-w-2xl"
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, ease: "easeInOut" }}
+          >
+            <h1 className="text-5xl md:text-7xl font-bold tracking-tight mb-4 text-transparent bg-clip-text bg-gradient-to-br from-blue-400 to-purple-500 text-balance pb-2">
+              Jude Photographs
+            </h1>
+            <p className="text-lg md:text-xl text-gray-300 mb-8 font-light max-w-xl mx-auto md:mx-0">
+              With a keen eye for detail and a passion for authentic moments, I craft compelling visual narratives that go beyond a simple photograph, turning your precious memories into timeless works of art.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+              <Link
+                to="/portfolio"
+                className="group flex items-center justify-center px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg shadow-blue-500/30 text-white"
+              >
+                View Portfolio <ArrowRightIcon className="ml-2 w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" />
+              </Link>
+              <a
+                href="https://www.instagram.com/judephotographs/reels/?hl=en"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex items-center justify-center px-6 py-3 bg-gradient-to-r from-purple-600 via-pink-600 to-orange-500 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg shadow-pink-500/30 text-white"
+              >
+                Instagram Reels <InstagramIcon className="ml-2 w-5 h-5 transition-transform duration-300 group-hover:rotate-12" />
+              </a>
+            </div>
+          </motion.div>
 
-  {/* Right: Image */}
-  <motion.div
-    className="flex-shrink-0 max-w-sm" // Use flex-shrink-0 to prevent image from shrinking
-    initial={{ opacity: 0, scale: 0.8 }}
-    animate={{ opacity: 1, scale: 1 }}
-    transition={{ duration: 0.8, delay: 0.2, ease: "easeInOut" }}
-  >
-    <div className="bg-gradient-to-br from-blue-500/50 to-purple-500/50 p-1.5 rounded-2xl shadow-2xl">
-      <img
-        src={ProfileImage}
-        alt="Jude Photographs Hero"
-        className="w-full rounded-xl object-cover"
-        loading="lazy"
-        decoding="async"
-      />
-    </div>
-  </motion.div>
-</section>
+          <motion.div
+            className="flex-shrink-0 max-w-sm"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, delay: 0.2, ease: "easeInOut" }}
+          >
+            <div className="bg-gradient-to-br from-blue-500/50 to-purple-500/50 p-1.5 rounded-2xl shadow-2xl">
+              <img
+                src={ProfileImage}
+                alt="Jude Photographs Hero"
+                className="w-full rounded-xl object-cover"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+          </motion.div>
+        </section>
 
         {/* Portfolio Preview */}
         <section className="space-y-8">
@@ -192,15 +174,22 @@ export default function Home() {
             Portfolio Preview
           </motion.h2>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+          <motion.div
+            className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={{
+              hidden: {},
+              visible: { transition: { staggerChildren: 0.1 } },
+            }}
+          >
             {portfolioImages.map((image, i) => (
               <motion.div
                 key={i}
                 className="group relative overflow-hidden rounded-xl shadow-lg"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.1 }}
+                variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
+                transition={{ duration: 0.5 }}
               >
                 <img
                   src={image.src}
@@ -214,7 +203,7 @@ export default function Home() {
                 </div>
               </motion.div>
             ))}
-          </div>
+          </motion.div>
         </section>
 
         {/* Testimonials */}

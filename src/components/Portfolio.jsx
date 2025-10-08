@@ -50,7 +50,7 @@ export default function Portfolio() {
   }, [activeTab]);
 
   return (
-    <div className="bg-gray-900 text-white">
+    <div className="bg-gray-900 text-white min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
         
         <div className="text-center">
@@ -78,56 +78,57 @@ export default function Portfolio() {
           ))}
         </div>
 
-        {/* --- FIX APPLIED HERE --- */}
-        {/* Added min-h-[60vh] to prevent the container from collapsing during tab switches */}
-        {/* --- FIXED GRID WITHOUT EXTRA SPACE --- */}
-<div className="mt-12">
-  <AnimatePresence mode="wait">
-    <motion.div
-      key={activeTab}
-      layout
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
-      transition={{ duration: 0.3 }}
-      className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6"
-    >
-      {portfolioData[activeTab].map((image) => (
-        <motion.div
-          key={image.id}
-          whileHover={{ scale: 1.05 }}
-          transition={{ type: "spring", stiffness: 300 }}
-          className="group relative aspect-w-4 aspect-h-3 rounded-lg overflow-hidden shadow-lg"
-        >
-          <img
-            src={image.src}
-            alt={image.alt}
-            className="w-full h-full object-cover"
-            loading="lazy"
-          />
-          <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
-            <p className="text-white text-sm font-medium">{image.alt}</p>
-          </div>
-        </motion.div>
-      ))}
-    </motion.div>
-  </AnimatePresence>
-</div>
-
-        
-        <div className="mt-24 text-center">
-             <h2 className="text-3xl font-bold tracking-tight text-gray-100 mb-4">
-                Ready to Create Your Own Story?
-            </h2>
-            <p className="text-lg text-gray-300 max-w-xl mx-auto mb-8">
-                If our work resonates with you, let's connect. We're excited to learn about your vision and help bring it to life.
-            </p>
-            <Link
-                to="/contact"
-                className="inline-block px-10 py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 rounded-lg font-semibold text-lg transition-all duration-300 transform hover:scale-105 shadow-lg shadow-blue-500/50"
+        {/* Portfolio Grid with Staggered Motion */}
+        <div className="mt-12 min-h-[60vh]">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeTab}
+              layout
+              initial="hidden"
+              animate="visible"
+              exit="hidden"
+              variants={{
+                hidden: { opacity: 0, y: -20 },
+                visible: { opacity: 1, y: 0, transition: { staggerChildren: 0.1 } },
+              }}
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6"
             >
-                Get In Touch
-            </Link>
+              {portfolioData[activeTab].map((image) => (
+                <motion.div
+                  key={image.id}
+                  className="group relative aspect-w-4 aspect-h-3 rounded-lg overflow-hidden shadow-lg"
+                  variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
+                  whileHover={{ scale: 1.05 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                >
+                  <img
+                    src={image.src}
+                    alt={image.alt}
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+                    <p className="text-white text-sm font-medium">{image.alt}</p>
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
+          </AnimatePresence>
+        </div>
+
+        <div className="mt-24 text-center">
+          <h2 className="text-3xl font-bold tracking-tight text-gray-100 mb-4">
+            Ready to Create Your Own Story?
+          </h2>
+          <p className="text-lg text-gray-300 max-w-xl mx-auto mb-8">
+            If our work resonates with you, let's connect. We're excited to learn about your vision and help bring it to life.
+          </p>
+          <Link
+            to="/contact"
+            className="inline-block px-10 py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 rounded-lg font-semibold text-lg transition-all duration-300 transform hover:scale-105 shadow-lg shadow-blue-500/50"
+          >
+            Get In Touch
+          </Link>
         </div>
 
       </div>
