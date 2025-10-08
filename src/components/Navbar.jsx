@@ -37,7 +37,7 @@ export default function Navbar() {
   };
 
   return (
-    <header className="fixed top-0 left-0 w-full z-50 bg-slate-900/60 backdrop-blur-lg border-b border-slate-700/50">
+    <header className="sticky top-0 left-0 w-full z-50 bg-slate-900/60 backdrop-blur-lg border-b border-slate-700/50">
       <nav className="max-w-7xl mx-auto flex items-center justify-between px-6 py-4">
         {/* Logo */}
         <Link to="/" className="flex items-center">
@@ -69,21 +69,30 @@ export default function Navbar() {
               initial="initial"
               animate="animate"
               transition={{ delay: 0.1 + i * 0.1, ease: "easeOut" }}
+              className="relative group"
             >
               <NavLink
                 to={link.path}
                 className={({ isActive }) =>
-                  `relative uppercase tracking-wider transition-colors duration-300 ${isActive ? 'text-white' : 'text-slate-300 hover:text-white'}`
+                  `relative uppercase tracking-wider transition-colors duration-300 ${
+                    isActive ? 'text-white' : 'text-slate-300 hover:text-white'
+                  }`
                 }
               >
                 {({ isActive }) => (
                   <>
                     {link.name}
-                    {isActive && (
+                    {isActive ? (
                       <motion.span
                         layoutId="underline"
-                        className="absolute left-0 -bottom-1 h-[2px] w-full bg-gradient-to-r from-indigo-500 to-violet-500"
+                        className="absolute left-0 -bottom-1.5 h-[2px] w-full bg-gradient-to-r from-indigo-500 to-violet-500"
                         transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                      />
+                    ) : (
+                      <span
+                        className="absolute left-0 -bottom-1.5 block h-[2px] w-full bg-white
+                                   transform scale-x-0 transition-transform duration-300 ease-out
+                                   group-hover:scale-x-100 origin-left"
                       />
                     )}
                   </>
