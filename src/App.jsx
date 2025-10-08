@@ -1,10 +1,12 @@
 import React, { useEffect, useRef } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import LocomotiveScroll from "locomotive-scroll";
-import "locomotive-scroll/dist/locomotive-scroll.css"; // ✅ Required CSS
+import About from "./components/About";
+import "locomotive-scroll/dist/locomotive-scroll.css";
 
 // Components
 import Navbar from "./components/Navbar";
+import Portfolio from "./components/Portfolio";
 import Footer from "./components/Footer";
 
 // Pages
@@ -18,9 +20,11 @@ export default function App() {
     const scrollEl = scrollRef.current;
     let locoScroll;
 
-    // ✅ Initialize after DOM paint
-    const initScroll = () => {
+    // We wait 100ms to initialize. This gives React time to render the new
+    // page's components, ensuring Locomotive Scroll gets the correct height.
+    const timer = setTimeout(() => {
       if (!scrollEl) return;
+      
       locoScroll = new LocomotiveScroll({
         el: scrollEl,
         smooth: true,
@@ -28,16 +32,27 @@ export default function App() {
         smartphone: { smooth: true },
         tablet: { smooth: true },
       });
-    };
 
-    requestAnimationFrame(initScroll);
+      // This is an additional safeguard. After another moment, we update again
+      // just in case any images were slow to load.
+      const updateTimer = setTimeout(() => {
+        if(locoScroll) locoScroll.update();
+      }, 500);
 
-    // ✅ Reposition to top on route change
-    window.scrollTo(0, 0);
+      // Add cleanup for the inner timer
+      locoScroll.on('destroy', () => {
+        clearTimeout(updateTimer);
+      });
 
-    // ✅ Cleanup
+    }, 100);
+
+
+    // Cleanup
     return () => {
-      if (locoScroll) locoScroll.destroy();
+      clearTimeout(timer);
+      if (locoScroll) {
+        locoScroll.destroy();
+      }
     };
   }, [pathname]);
 
@@ -55,7 +70,9 @@ export default function App() {
       <main data-scroll-section>
         <Routes>
           <Route path="/" element={<Home />} />
-          {/* Add other routes here */}
+          <Route path="/portfolio" element={<Portfolio />} />
+          <Route path="/about" element={<About />} />
+            {/* Add other routes here */}
         </Routes>
         <Footer />
       </main>

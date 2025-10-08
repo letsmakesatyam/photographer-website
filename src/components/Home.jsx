@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import ProfileImage from "../assets/ProfileImage.png";
 
 // --- SVG Icons ---
 const ArrowRightIcon = ({ className }) => (
@@ -55,7 +56,7 @@ const portfolioSets = [
     { src: "https://images.pexels.com/photos/17851094/pexels-photo-17851094.jpeg?auto=compress&cs=tinysrgb&w=800&h=1000", alt: "Raised Hands at Event" },
   ],
 ];
-
+  
 
 const testimonials = [
   { name: "Neil V Banks", text: "Truly one of the finest photographers. His versatility allows him to click fantastic shots for profiles, products, concerts, and landscapes." },
@@ -128,54 +129,56 @@ export default function Home() {
 
       <div className="relative z-10 px-6 md:px-12 py-16 space-y-24 md:space-y-32">
         {/* Hero Section */}
-        <section className="min-h-[80vh] flex flex-col md:flex-row items-center justify-between gap-12">
-          <motion.div
-            className="flex-1 text-center md:text-left"
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, ease: "easeInOut" }}
-          >
-            <h1 className="text-5xl md:text-7xl font-bold tracking-tight mb-4 text-transparent bg-clip-text bg-gradient-to-br from-white to-slate-400 text-balance">
-              Jude Photographs
-            </h1>
-            <p className="text-lg md:text-xl text-slate-300 mb-8 font-light max-w-xl mx-auto md:mx-0">
-              जुड़े फोटोग्राफ्स — Capturing timeless moments with artistry and passion.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-              <Link
-                to="/portfolio"
-                className="group flex items-center justify-center px-6 py-3 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg shadow-indigo-500/30"
-              >
-                View Portfolio <ArrowRightIcon className="ml-2 w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" />
-              </Link>
-              <a
-                href="https://www.instagram.com/judephotographs/reels/?hl=en"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex items-center justify-center px-6 py-3 border-2 border-slate-600 hover:bg-slate-800 hover:border-slate-500 rounded-lg font-semibold transition-all duration-300"
-              >
-                Instagram Reels <InstagramIcon className="ml-2 w-5 h-5 transition-transform duration-300 group-hover:rotate-12" />
-              </a>
-            </div>
-          </motion.div>
+        <section className="min-h-[80vh] flex flex-col md:flex-row items-center justify-center gap-12 md:gap-20 px-6">
+  {/* Left: Text Content */}
+  <motion.div
+    className="flex-1 text-center md:text-left max-w-2xl"
+    initial={{ opacity: 0, x: -50 }}
+    animate={{ opacity: 1, x: 0 }}
+    transition={{ duration: 0.8, ease: "easeInOut" }}
+  >
+    <h1 className="text-5xl md:text-7xl font-bold tracking-tight mb-4 text-transparent bg-clip-text bg-gradient-to-br from-blue-400 to-purple-500 text-balance pb-2">
+      Jude Photographs
+    </h1>
+    <p className="text-lg md:text-xl text-gray-300 mb-8 font-light max-w-xl mx-auto md:mx-0">
+      With a keen eye for detail and a passion for authentic moments, I craft compelling visual narratives that go beyond a simple photograph, turning your precious memories into timeless works of art.
+    </p>
+    <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+      <Link
+        to="/portfolio"
+        className="group flex items-center justify-center px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg shadow-blue-500/30 text-white"
+      >
+        View Portfolio <ArrowRightIcon className="ml-2 w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" />
+      </Link>
+      <a
+        href="https://www.instagram.com/judephotographs/reels/?hl=en"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="group flex items-center justify-center px-6 py-3 bg-gradient-to-r from-purple-600 via-pink-600 to-orange-500 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg shadow-pink-500/30 text-white"
+      >
+        Instagram Reels <InstagramIcon className="ml-2 w-5 h-5 transition-transform duration-300 group-hover:rotate-12" />
+      </a>
+    </div>
+  </motion.div>
 
-          <motion.div
-            className="flex-1 max-w-lg"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.2, ease: "easeInOut" }}
-          >
-            <div className="bg-gradient-to-br from-violet-500/50 to-indigo-500/50 p-1.5 rounded-2xl shadow-2xl">
-              <img
-                src="https://source.unsplash.com/900x1200/?photography,portrait&sig=101"
-                alt="Jude Photographs Hero"
-                className="w-full rounded-xl object-cover"
-                loading="lazy"
-                decoding="async"
-              />
-            </div>
-          </motion.div>
-        </section>
+  {/* Right: Image */}
+  <motion.div
+    className="flex-shrink-0 max-w-sm" // Use flex-shrink-0 to prevent image from shrinking
+    initial={{ opacity: 0, scale: 0.8 }}
+    animate={{ opacity: 1, scale: 1 }}
+    transition={{ duration: 0.8, delay: 0.2, ease: "easeInOut" }}
+  >
+    <div className="bg-gradient-to-br from-blue-500/50 to-purple-500/50 p-1.5 rounded-2xl shadow-2xl">
+      <img
+        src={ProfileImage}
+        alt="Jude Photographs Hero"
+        className="w-full rounded-xl object-cover"
+        loading="lazy"
+        decoding="async"
+      />
+    </div>
+  </motion.div>
+</section>
 
         {/* Portfolio Preview */}
         <section className="space-y-8">
